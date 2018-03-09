@@ -2,36 +2,54 @@
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \frontend\models\FinanceForm */
 
+/* @var $model Finance */
+
+use frontend\models\Finance;
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+use yii\helpers\Url;
 
 $this->title = 'Finance';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-finance">
+<div class="finances">
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>Please fill out the following fields to create new finance:</p>
-
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'form-finance']); ?>
-
-            <?= $form->field($model, 'stock')->textInput(['autofocus' => true]) ?>
-
-            <?= $form->field($model, 'source') ?>
-
-            <?= $form->field($model, 'sum') ?>
-
-            <?= $form->field($model, 'currency') ?>
-
-            <div class="form-group">
-                <?= Html::submitButton('Create', ['class' => 'btn btn-primary', 'name' => 'finance-button']) ?>
-            </div>
-
-            <?php ActiveForm::end(); ?>
-        </div>
-    </div>
+    <table border="1" width="100%">
+        <tr>
+            <td>
+                Date
+            </td>
+            <td>
+                Sum UAH
+            </td>
+            <td>
+                Sum USD
+            </td>
+            <td>
+            </td>
+        </tr>
+        <?php foreach (Finance::find()->all() as $financeModel) {
+            $id = null; ?>
+            <tr>
+                <?php foreach ($financeModel->attributes as $key => $attribute) { ?>
+                <?php if ($key != 'id') { ?>
+                    <td>
+                        <?php echo $attribute; ?>
+                    </td>
+                <?php } else {
+                    $id = $attribute;
+                    }
+                } ?>
+                <td>
+                    <?php echo $attribute/26; ?>
+                </td>
+                <td>
+                    <a href="<?php echo Url::to(['finance-details', 'id' => $id])?> ">
+                        Show  details
+                    </a>
+                </td>
+            </tr>
+            <?php
+        } ?>
+    </table>
 </div>
