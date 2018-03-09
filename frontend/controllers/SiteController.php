@@ -111,7 +111,12 @@ class SiteController extends Controller
 
     public function actionFinance()
     {
-        return $this->render('finance_show');
+        return $this->render('finance');
+    }
+
+    public function actionFinanceDetails()
+    {
+        return $this->render('finance/details');
 
     }
 
