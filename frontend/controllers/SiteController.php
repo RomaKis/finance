@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use frontend\models\finance\Rate;
 use frontend\models\finance\Source;
 use frontend\models\finance\Stock;
 use Yii;
@@ -213,6 +214,15 @@ class SiteController extends Controller
             $model->save();
         }
         return $this->render('finance/add/source', ['model' => $model]);
+    }
+
+    public function actionAddRate()
+    {
+        $model = new Rate();
+        if ($model->load(Yii::$app->request->post())) {
+            $model->save();
+        }
+        return $this->render('finance/add/rate', ['model' => $model]);
     }
 
     public function actionAddFinance()
