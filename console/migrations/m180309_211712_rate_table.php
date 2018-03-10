@@ -4,9 +4,9 @@ use yii\db\Migration;
 use yii\db\mysql\Schema;
 
 /**
- * Class m180304_134235_finance
+ * Class m180309_211712_rate_table
  */
-class m180304_134235_finance_details_table extends Migration
+class m180309_211712_rate_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -14,16 +14,11 @@ class m180304_134235_finance_details_table extends Migration
     public function safeUp()
     {
         $this->createTable(
-            'finance_details',
+            'rate',
             [
                 'id' => Schema::TYPE_PK,
-                'finance_id' => Schema::TYPE_INTEGER,
-                'user_id' => Schema::TYPE_INTEGER,
-                'stock' => Schema::TYPE_STRING . ' NOT NULL',
-                'source' => Schema::TYPE_STRING,
-                'sum' => Schema::TYPE_FLOAT,
-                'currency' => "ENUM('UAH', 'USD', 'EUR') DEFAULT UAH",
-                'is_active' => Schema::TYPE_BOOLEAN . ' DEFAULT \'0\'',
+                'currency' => Schema::TYPE_STRING,
+                'coefficient' => Schema::TYPE_FLOAT,
             ]
         );
     }
@@ -33,7 +28,7 @@ class m180304_134235_finance_details_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('finance_details');
+        $this->dropTable('rate');
 
         return true;
     }

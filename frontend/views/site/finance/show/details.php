@@ -82,11 +82,10 @@ $this->params['breadcrumbs'][] = $this->title;
         </tr>
         <tr>
             <td>SUM</td>
-
             <td>
                 <?php
-                $koefficient = Rate::findIdentitiesByCurrency('USD')->getAttribute('coefficient');
-                echo($sum / $koefficient);
+                $coefficient = Rate::findIdentitiesByCurrency('USD')->getAttribute('coefficient');
+                echo($sum / $coefficient);
                 ?>
             </td>
             <td>
@@ -94,5 +93,4 @@ $this->params['breadcrumbs'][] = $this->title;
             </td>
         </tr>
     </table>
-
 </div>

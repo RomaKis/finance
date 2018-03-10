@@ -4,9 +4,9 @@ use yii\db\Migration;
 use yii\db\mysql\Schema;
 
 /**
- * Class m180304_134235_finance_table
+ * Class m180309_210053_source_table
  */
-class m180308_211413_finance_table extends Migration
+class m180309_210053_source_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -14,13 +14,15 @@ class m180308_211413_finance_table extends Migration
     public function safeUp()
     {
         $this->createTable(
-            'finance',
+            'source',
             [
                 'id' => Schema::TYPE_PK,
-                'date' => Schema::TYPE_DATE,
-                'sum' => Schema::TYPE_FLOAT,
+                'stock_id' => Schema::TYPE_INTEGER,
+                'source' => Schema::TYPE_STRING,
             ]
         );
+
+        $this->addForeignKey('stock_to_source', 'source', 'stock_id', 'stock', 'id');
     }
 
     /**
@@ -28,7 +30,7 @@ class m180308_211413_finance_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('finance');
+        $this->dropTable('source');
 
         return true;
     }
@@ -42,7 +44,7 @@ class m180308_211413_finance_table extends Migration
 
     public function down()
     {
-        echo "m180304_134235_finance cannot be reverted.\n";
+        echo "m180309_210053_source_table cannot be reverted.\n";
 
         return false;
     }
