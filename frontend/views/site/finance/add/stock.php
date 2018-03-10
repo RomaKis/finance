@@ -1,7 +1,6 @@
 <?php
 
 use frontend\models\resource\finance\Stock;
-use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 ?>
@@ -11,10 +10,10 @@ use yii\helpers\Html;
     <table border="1" width="100%">
         <tr>
             <td>
-                ID
+                Id
             </td>
             <td>
-                NAME
+                Name
             </td>
         </tr>
         <?php foreach (Stock::find()->all() as $existModel) {?>

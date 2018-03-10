@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use frontend\models\finance\Source;
 use frontend\models\finance\Stock;
 use Yii;
 use yii\base\InvalidParamException;
@@ -203,6 +204,15 @@ class SiteController extends Controller
             $model->save();
         }
         return $this->render('finance/add/stock', ['model' => $model]);
+    }
+
+    public function actionAddSource()
+    {
+        $model = new Source();
+        if ($model->load(Yii::$app->request->post())) {
+            $model->save();
+        }
+        return $this->render('finance/add/source', ['model' => $model]);
     }
 
     public function actionAddFinance()
