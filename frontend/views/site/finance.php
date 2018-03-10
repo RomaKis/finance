@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php echo $attribute/26; ?>
                 </td>
                 <td>
-                    <a href="<?php echo Url::to(['finance-details', 'id' => $id])?> ">
+                    <a href="<?php echo Url::to(['finance-details', 'id' => $id])?>">
                         Show  details
                     </a>
                 </td>

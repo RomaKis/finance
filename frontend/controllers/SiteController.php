@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use frontend\models\finance\Stock;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -109,17 +110,6 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-    public function actionFinance()
-    {
-        return $this->render('finance');
-    }
-
-    public function actionFinanceDetails()
-    {
-        return $this->render('finance/details');
-
-    }
-
     /**
      * Signs user up.
      *
@@ -188,5 +178,40 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+
+    public function actionFinance()
+    {
+        return $this->render('finance');
+    }
+
+    public function actionFinanceDetails()
+    {
+        return $this->render('finance/show/details');
+    }
+
+    public function actionAdd()
+    {
+        return $this->render('finance/add');
+    }
+
+    public function actionAddStock()
+    {
+        $model = new Stock();
+        if ($model->load(Yii::$app->request->post())) {
+            $model->save();
+        }
+        return $this->render('finance/add/stock', ['model' => $model]);
+    }
+
+    public function actionAddFinance()
+    {
+        return $this->render('finance/add/finance');
+    }
+
+    public function actionAddFinanceDetails()
+    {
+        return $this->render('finance/add/finance-details');
     }
 }
