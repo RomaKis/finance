@@ -6,9 +6,10 @@ use yii\db\ActiveRecord;
 
 /**
  * @property integer $id
- * @property string $stock
+ * @property integer $stock_id
+ * @property string $source
  */
-class Stock extends ActiveRecord
+class Source extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -16,7 +17,8 @@ class Stock extends ActiveRecord
     public function rules()
     {
         return [
-            ['stock', 'required'],
+            ['source', 'required'],
+            ['stock_id', 'required'],
         ];
     }
 
@@ -25,7 +27,7 @@ class Stock extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%stock}}';
+        return '{{%source}}';
     }
 
     public static function findIdentity($id)
