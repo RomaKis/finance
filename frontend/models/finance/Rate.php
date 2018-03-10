@@ -2,29 +2,26 @@
 
 namespace frontend\models\finance;
 
-use yii\db\ActiveRecord;
+use yii\base\Model;
 
-class Rate extends ActiveRecord
+class Rate extends Model
 {
-    const UAH = 'UAH';
-    const EUR = 'EUR';
-    const USD = 'USD';
+    public $currency;
+    public $coefficient;
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName()
+    public function rules()
     {
-        return '{{%rate}}';
+        return [
+            ['currency', 'required'],
+            ['coefficient', 'required'],
+        ];
     }
 
-    public static function findIdentity($id)
+    public function save()
     {
-        return static::findOne(['id' => $id]);
-    }
-
-    public static function findIdentitiesByCurrency($currency = self::UAH)
-    {
-        return static::findOne(['currency' => $currency]);
+        $rate = new \frontend\models\resource\finance\Rate();
+        $rate->currency = $this->currency;
+        $rate->coefficient = $this->coefficient;
+        $rate->save();
     }
 }

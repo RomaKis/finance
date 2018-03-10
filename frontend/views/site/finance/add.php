@@ -9,6 +9,10 @@
         <h3><a href="<?php echo Url::to(['add-source'])?>" >Add source</a></h3>
     </div>
 
+    <div class="add-rate">
+        <h3><a href="<?php echo Url::to(['add-rate'])?>" >Add rate</a></h3>
+    </div>
+
     <div class="add-finance">
         <h3><a href="<?php echo Url::to(['add-finance'])?>" >Add finance</a></h3>
     </div>
