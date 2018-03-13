@@ -1,5 +1,6 @@
 <?php
 
+use frontend\models\resource\finance\Rate;
 use yii\db\Migration;
 use yii\db\mysql\Schema;
 
@@ -17,7 +18,7 @@ class m180309_211712_rate_table extends Migration
             'rate',
             [
                 'id' => Schema::TYPE_PK,
-                'currency' => Schema::TYPE_STRING,
+                'currency' => "ENUM('" . Rate::UAH . "', '" . Rate::USD . "', '" . Rate::EUR . "')" . " UNIQUE",
                 'coefficient' => Schema::TYPE_FLOAT,
             ]
         );

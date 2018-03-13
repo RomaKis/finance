@@ -36,9 +36,11 @@ use yii\helpers\Html;
 
     <?php $form = ActiveForm::begin(['id' => 'rate-form']); ?>
 
-    <?= $form->field($model, 'currency')->textInput(['autofocus' => true]) ?>
+    <?= $form->field($model, 'currency')->dropDownList(
+            [Rate::UAH => Rate::UAH, Rate::USD => Rate::USD, Rate::EUR => Rate::EUR]
+    ) ?>
 
-    <?= $form->field($model, 'coefficient')->textInput() ?>
+    <?= $form->field($model, 'coefficient')->textInput(['autofocus' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'name' => 'rate-button']) ?>

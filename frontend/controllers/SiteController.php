@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use frontend\models\finance\Details;
 use frontend\models\finance\Rate;
 use frontend\models\finance\Source;
 use frontend\models\finance\Stock;
@@ -185,7 +186,7 @@ class SiteController extends Controller
 
     public function actionFinance()
     {
-        return $this->render('finance');
+        return $this->render('finance/show/finance');
     }
 
     public function actionFinanceDetails()
@@ -203,6 +204,7 @@ class SiteController extends Controller
         $model = new Stock();
         if ($model->load(Yii::$app->request->post())) {
             $model->save();
+            $model = new Stock();
         }
         return $this->render('finance/add/stock', ['model' => $model]);
     }
@@ -212,6 +214,7 @@ class SiteController extends Controller
         $model = new Source();
         if ($model->load(Yii::$app->request->post())) {
             $model->save();
+            $model = new Source();
         }
         return $this->render('finance/add/source', ['model' => $model]);
     }
@@ -221,17 +224,19 @@ class SiteController extends Controller
         $model = new Rate();
         if ($model->load(Yii::$app->request->post())) {
             $model->save();
+            $model = new Rate();
         }
         return $this->render('finance/add/rate', ['model' => $model]);
     }
 
-    public function actionAddFinance()
-    {
-        return $this->render('finance/add/finance');
-    }
-
     public function actionAddFinanceDetails()
     {
-        return $this->render('finance/add/finance-details');
+        $model = new Details();
+        if ($model->load(Yii::$app->request->post())) {
+            $model->save();
+            $model = new Details();
+        }
+        $model->isActive = true;
+        return $this->render('finance/add/finance-details', ['model' => $model]);
     }
 }

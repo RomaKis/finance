@@ -1,10 +1,21 @@
 <?php
 
-namespace frontend\models\finance;
+namespace frontend\models\resource\finance;
 
-use yii\base\Model;
+use frontend\models\Finance;
+use yii\db\ActiveRecord;
 
-class Details extends Model
+/**
+ * @property integer $id
+ * @property integer $user_id
+ * @property integer $stock_id
+ * @property integer $source_id
+ * @property integer $sum
+ * @property integer $currency
+ * @property integer $is_active
+ * @property integer $date
+ */
+class Details extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -19,16 +30,54 @@ class Details extends Model
         return static::findOne(['id' => $id]);
     }
 
-    public static function findIdentitiesByUserId($userId)
+    /**
+     * @return array
+     */
+    public static function findGroupedByDate()
     {
-        return static::findAll(['user_id' => $userId]);
+        $data = static::find()->all();
+        $finances = [];
+        foreach ($data as $datum) {
+            $finance = new Finance();
+
+            $finance->date = $datum->getAttribute('date');
+            $finance->sumUah += self::getSumUah(
+                $datum->getAttribute('sum'),
+                $datum->getAttribute('currency')
+            );
+            $finance->sumUsd += self::getSumUsd(
+                $datum->getAttribute('sum'),
+                $datum->getAttribute('currency')
+            );
+            $finances[] = $finance;
+        }
+
+        return $finances;
     }
 
-    public function save()
+    private static function getSumUah($tempSum, $currency)
     {
-        $rate = new \frontend\models\resource\finance\Rate();
-        $rate->currency = $this->currency;
-        $rate->coefficient = $this->coefficient;
-        $rate->save();
+        if ($currency === Rate::UAH) {
+            $sum = $tempSum;
+        } else {
+            $rate = Rate::findIdentityByCurrency($currency);
+            $sum = $tempSum * $rate->getAttribute('coefficient');
+        }
+
+        return $sum;
+    }
+
+    private static function getSumUsd($tempSum, $currency)
+    {
+        if ($currency === Rate::USD) {
+            $sum = $tempSum;
+        } else {
+            $rate = Rate::findIdentityByCurrency($currency);
+            $sum = $tempSum * $rate->getAttribute('coefficient');
+            $rateUSD = Rate::findIdentityByCurrency(Rate::USD);
+            $sum = $sum / $rateUSD->getAttribute('coefficient');
+        }
+
+        return $sum;
     }
 }

@@ -1,8 +1,11 @@
 <?php
+
 use frontend\models\resource\finance\Source;
 use frontend\models\resource\finance\Stock;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+
+/** @var \frontend\models\finance\Source $model */
 ?>
 
 <div class="add-source">
@@ -16,16 +19,24 @@ use yii\helpers\Html;
                 Stock Id
             </td>
             <td>
-                Name
+                Stock Name
+            </td>
+            <td>
+                Source Name
             </td>
         </tr>
         <?php foreach (Source::find()->all() as $existModel) { ?>
             <tr>
-                <?php foreach ($existModel->attributes as $attribute) { ?>
+                <?php foreach ($existModel->attributes as $key => $attribute) { ?>
                     <td>
                         <?php echo $attribute; ?>
                     </td>
-                    <?php
+                    <?php if ($key === 'stock_id') { ?>
+                        <td>
+                            <?php echo $model->getStockNameById($attribute) ?>
+                        </td>
+                        <?php
+                    }
                 } ?>
             </tr>
             <?php
@@ -39,12 +50,10 @@ use yii\helpers\Html;
     <?php
     $selectArray = [];
     foreach (Stock::find()->all() as $stock) {
-        $selectArray[$stock->getAttribute('id')] = $stock->getAttribute('stock');
+        $selectArray[$stock->getAttribute('id')] = $stock->getAttribute('name');
     }
     ?>
-    <?=
-    $form->field($model, 'stockId')->dropDownList($selectArray)
-    ?>
+    <?= $form->field($model, 'stockId')->dropDownList($selectArray) ?>
 
     <?= $form->field($model, 'name')->textInput(['autofocus' => true]) ?>
 

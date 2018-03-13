@@ -18,7 +18,7 @@ class m180309_210053_source_table extends Migration
             [
                 'id' => Schema::TYPE_PK,
                 'stock_id' => Schema::TYPE_INTEGER,
-                'source' => Schema::TYPE_STRING,
+                'name' => Schema::TYPE_STRING . ' UNIQUE',
             ]
         );
 
