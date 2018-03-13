@@ -2,30 +2,43 @@
 
 namespace frontend\models\finance;
 
-use yii\db\ActiveRecord;
+use frontend\models\resource\finance\Details as ResourceDetails;
+use yii\base\Model;
 
-class Details extends ActiveRecord
+class Details extends Model
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName()
+    public $userId;
+    public $stockId;
+    public $sourceId;
+    public $sum;
+    public $currency;
+    public $isActive;
+    public $date;
+
+    public function rules()
     {
-        return '{{%finance_details}}';
+        return [
+            ['userId', 'required'],
+            ['stockId', 'required'],
+            ['sourceId', 'required'],
+            ['sum', 'required'],
+            ['currency', 'required'],
+            ['isActive', 'required'],
+            ['date', 'required'],
+        ];
     }
 
-    public static function findIdentity($id)
+    public function save()
     {
-        return static::findOne(['id' => $id]);
-    }
+        $details = new ResourceDetails();
+        $details->user_id = $this->userId;
+        $details->stock_id = $this->stockId;
+        $details->source_id = $this->sourceId;
+        $details->sum = $this->sum;
+        $details->currency = $this->currency;
+        $details->is_active = $this->isActive;
+        $details->date = date('Y-m-d');
 
-    public static function findIdentitiesByUserId($userId)
-    {
-        return static::findAll(['user_id' => $userId]);
-    }
-
-    public static function findIdentitiesByFinanceId($userId)
-    {
-        return static::findAll(['finance_id' => $userId]);
+        $details->save();
     }
 }

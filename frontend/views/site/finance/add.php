@@ -13,10 +13,6 @@
         <h3><a href="<?php echo Url::to(['add-rate'])?>" >Add rate</a></h3>
     </div>
 
-    <div class="add-finance">
-        <h3><a href="<?php echo Url::to(['add-finance'])?>" >Add finance</a></h3>
-    </div>
-
     <div class="add-finance-details">
         <h3><a href="<?php echo Url::to(['add-finance-details'])?>" >Add finance details</a></h3>
     </div>
