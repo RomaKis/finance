@@ -2,30 +2,23 @@
 
 namespace frontend\models\finance;
 
-use yii\db\ActiveRecord;
+use yii\base\Model;
 
-class Details extends ActiveRecord
+class Details extends Model
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName()
+    public function rules()
     {
-        return '{{%finance_details}}';
+        return [
+            ['currency', 'required'],
+            ['coefficient', 'required'],
+        ];
     }
 
-    public static function findIdentity($id)
+    public function save()
     {
-        return static::findOne(['id' => $id]);
-    }
-
-    public static function findIdentitiesByUserId($userId)
-    {
-        return static::findAll(['user_id' => $userId]);
-    }
-
-    public static function findIdentitiesByFinanceId($userId)
-    {
-        return static::findAll(['finance_id' => $userId]);
+        $rate = new \frontend\models\resource\finance\Rate();
+        $rate->currency = $this->currency;
+        $rate->coefficient = $this->coefficient;
+        $rate->save();
     }
 }
