@@ -6,7 +6,7 @@ use yii\db\ActiveRecord;
 
 /**
  * @property integer $id
- * @property string $stock
+ * @property string $name
  */
 class Stock extends ActiveRecord
 {
@@ -16,7 +16,7 @@ class Stock extends ActiveRecord
     public function rules()
     {
         return [
-            ['stock', 'required'],
+            ['name', 'required'],
         ];
     }
 

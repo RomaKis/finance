@@ -2,20 +2,13 @@
 
 namespace frontend\models;
 
-use yii\db\ActiveRecord;
+use Yii;
+use yii\base\Model;
 
-class Finance extends ActiveRecord
+class Finance extends Model
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName()
-    {
-        return '{{%finance}}';
-    }
+    public $date;
+    public $sumUah;
+    public $sumUsd;
 
-    public static function findIdentity($id)
-    {
-        return static::findOne(['id' => $id]);
-    }
 }

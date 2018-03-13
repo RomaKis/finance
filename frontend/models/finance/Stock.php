@@ -19,7 +19,7 @@ class Stock extends Model
     public function save()
     {
         $stock = new \frontend\models\resource\finance\Stock();
-        $stock->stock = $this->name;
+        $stock->name = $this->name;
         $stock->save();
     }
 

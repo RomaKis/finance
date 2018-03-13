@@ -2,6 +2,7 @@
 
 namespace frontend\models\finance;
 
+use frontend\models\resource\finance\Rate as ResourceRate;
 use yii\base\Model;
 
 class Rate extends Model
@@ -19,7 +20,13 @@ class Rate extends Model
 
     public function save()
     {
-        $rate = new \frontend\models\resource\finance\Rate();
+        $rate = ResourceRate::findIdentityByCurrency($this->currency);
+
+        if (null === $rate)
+        {
+            $rate = new ResourceRate();
+
+        }
         $rate->currency = $this->currency;
         $rate->coefficient = $this->coefficient;
         $rate->save();

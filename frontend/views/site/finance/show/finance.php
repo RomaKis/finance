@@ -11,6 +11,7 @@ use yii\helpers\Url;
 
 $this->title = 'Finance';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="finances">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -22,29 +23,22 @@ $this->params['breadcrumbs'][] = $this->title;
             <td>
                 Sum UAH
             </td>
+
             <td>
                 Sum USD
             </td>
-            <td>
-            </td>
         </tr>
-        <?php foreach (Finance::find()->all() as $financeModel) {
-            $id = null; ?>
+        <?php foreach (\frontend\models\resource\finance\Details::findGroupedByDate() as $finance) { ?>
             <tr>
-                <?php foreach ($financeModel->attributes as $key => $attribute) { ?>
-                <?php if ($key != 'id') { ?>
-                    <td>
-                        <?php echo $attribute; ?>
+                <?php foreach ($finance->attributes as $attribute) { ?>
+                <td>
+                    <?php echo $attribute;
+                    ?>
                     </td>
-                <?php } else {
-                    $id = $attribute;
-                    }
-                } ?>
+               <?php } ?>
+
                 <td>
-                    <?php echo $attribute/26; ?>
-                </td>
-                <td>
-                    <a href="<?php echo Url::to(['finance-details', 'id' => $id])?>">
+                    <a href="<?php echo Url::to(['finance-details', 'date' => $finance->date])?>">
                         Show  details
                     </a>
                 </td>

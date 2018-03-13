@@ -28,7 +28,7 @@ class Rate extends ActiveRecord
         return static::findOne(['id' => $id]);
     }
 
-    public static function findIdentitiesByCurrency($currency = self::UAH)
+    public static function findIdentityByCurrency($currency = self::UAH)
     {
         return static::findOne(['currency' => $currency]);
     }
