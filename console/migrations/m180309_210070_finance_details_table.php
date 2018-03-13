@@ -27,7 +27,6 @@ class m180309_210070_finance_details_table extends Migration
             ]
         );
 
-        $this->addForeignKey('finance_details_user', 'finance_details', 'finance_id', 'finance', 'id');
         $this->addForeignKey('finance_details_stock', 'finance_details', 'stock_id', 'stock', 'id');
         $this->addForeignKey('finance_details_source', 'finance_details', 'source_id', 'source', 'id');
 
