@@ -237,6 +237,6 @@ class SiteController extends Controller
             $model = new Details();
         }
         $model->isActive = true;
-        return $this->render('finance/add/finance-details', ['model' => $model]);
+        return $this->render('finance/add/details', ['model' => $model]);
     }
 }

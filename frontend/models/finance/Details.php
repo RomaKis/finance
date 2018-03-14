@@ -2,6 +2,7 @@
 
 namespace frontend\models\finance;
 
+use frontend\models\SumProvider;
 use frontend\models\resource\finance\Details as ResourceDetails;
 use yii\base\Model;
 
@@ -40,5 +41,22 @@ class Details extends Model
         $details->date = date('Y-m-d');
 
         $details->save();
+    }
+
+    public static function getGroupedByDate()
+    {
+        $financeDetails = ResourceDetails::find()->all();
+        $sumProvider = new SumProvider();
+
+        foreach ($financeDetails as $financeDetail) {
+            $sumUah = Rate::getSumUah(
+                $financeDetail->getAttribute('sum'),
+                $financeDetail->getAttribute('currency')
+            );
+
+            $sumProvider->addSumForDate($financeDetail->getAttribute('date'), $sumUah);
+        }
+
+        return $sumProvider;
     }
 }

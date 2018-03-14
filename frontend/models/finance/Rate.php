@@ -31,4 +31,30 @@ class Rate extends Model
         $rate->coefficient = $this->coefficient;
         $rate->save();
     }
+
+    public static function getSumUah($tempSum, $currency)
+    {
+        if ($currency === ResourceRate::UAH) {
+            $sum = $tempSum;
+        } else {
+            $rate = ResourceRate::findIdentityByCurrency($currency);
+            $sum = $tempSum * $rate->getAttribute('coefficient');
+        }
+
+        return $sum;
+    }
+
+    public static function getSumUsd($tempSum, $currency)
+    {
+        if ($currency === ResourceRate::USD) {
+            $sum = $tempSum;
+        } else {
+            $rate = ResourceRate::findIdentityByCurrency($currency);
+            $sum = $tempSum * $rate->getAttribute('coefficient');
+            $rateUSD = ResourceRate::findIdentityByCurrency(ResourceRate::USD);
+            $sum = $sum / $rateUSD->getAttribute('coefficient');
+        }
+
+        return $sum;
+    }
 }

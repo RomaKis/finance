@@ -3,32 +3,20 @@
 use frontend\models\resource\finance\Stock;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
-?>
+use yii\grid\GridView;
 
+?>
 <div class="add-stock">
     <h3>Existing Stocks</h3>
-    <table border="1" width="100%">
-        <tr>
-            <td>
-                Id
-            </td>
-            <td>
-                Name
-            </td>
-        </tr>
-        <?php foreach (Stock::find()->all() as $existModel) {?>
-            <tr>
-                <?php foreach ($existModel->attributes as $attribute) { ?>
-                        <td>
-                            <?php echo $attribute; ?>
-                        </td>
-                    <?php
-                } ?>
-            </tr>
-            <?php
-        } ?>
-    </table>
-    <br>
+    <?php
+    $dataProvider = new \yii\data\ArrayDataProvider([
+        'allModels' => Stock::find()->all(),
+
+    ]);
+    echo GridView::widget([
+        'dataProvider' => $dataProvider,
+    ]);
+    ?>
     <h3>Add Stock</h3>
 
     <?php $form = ActiveForm::begin(['id' => 'stock-form']); ?>
