@@ -26,12 +26,4 @@ class Source extends Model
         $source->name = $this->name;
         $source->save();
     }
-
-    public function getStockNameById($id)
-    {
-        $stock = new Stock();
-        $stock = $stock->findIdentity(['id' => $id]);
-
-        return $stock->name;
-    }
 }
