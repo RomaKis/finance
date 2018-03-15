@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 
 /**
  * @property integer $id
+ * @property integer $user_id
  * @property integer $stock_id
  * @property string $name
  */
@@ -33,7 +34,7 @@ class Source extends ActiveRecord
 
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id]);
+        return static::findOne(['id' => $id, 'user_id' => Yii::$app->getUser()->getId()]);
     }
 
     public static function find()

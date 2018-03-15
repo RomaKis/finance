@@ -22,12 +22,16 @@ class SumProvider extends Model
     public function getSumByDate($date = null)
     {
         $finances = [];
+        $previousSum = 0;
         foreach ($this->sumByDate as $sumDate => $sumUah) {
             if ($date === null || $sumDate == $date) {
                 $finance = new Finance();
                 $finance->date = $sumDate;
                 $finance->sumUah = $sumUah;
                 $finance->sumUsd = Rate::getSumUsd($sumUah, ResourceRate::UAH);
+                $finance->difference = $sumUah - $previousSum;
+                $previousSum= $sumUah;
+
                 $finances[] = $finance;
             }
         }

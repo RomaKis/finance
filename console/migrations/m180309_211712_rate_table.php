@@ -19,7 +19,7 @@ class m180309_211712_rate_table extends Migration
             [
                 'id' => Schema::TYPE_PK,
                 'user_id' => Schema::TYPE_INTEGER,
-                'currency' => "ENUM('" . Rate::UAH . "', '" . Rate::USD . "', '" . Rate::EUR . "')" . " UNIQUE",
+                'currency' => "ENUM('" . Rate::UAH . "', '" . Rate::USD . "', '" . Rate::EUR . "')",
                 'coefficient' => Schema::TYPE_FLOAT,
             ]
         );

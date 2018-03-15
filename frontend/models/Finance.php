@@ -10,4 +10,5 @@ class Finance extends Model
     public $sumUah;
     public $sumUsd;
     public $onHoldUah;
+    public $difference;
 }
