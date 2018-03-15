@@ -5,6 +5,9 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
+$this->title = 'Add Rate';
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="add-rate">
     <h3>Existing Rates</h3>

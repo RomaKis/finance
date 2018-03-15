@@ -1,4 +1,8 @@
-<?php use yii\helpers\Url; ?>
+<?php use yii\helpers\Url;
+
+$this->title = 'Add';
+$this->params['breadcrumbs'][] = $this->title;
+?>
 
 <div class="add-base">
 

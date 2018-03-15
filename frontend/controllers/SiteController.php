@@ -1,12 +1,15 @@
 <?php
+
 namespace frontend\controllers;
 
 use frontend\models\finance\Details;
 use frontend\models\finance\Rate;
 use frontend\models\finance\Source;
+use frontend\models\resource\finance\Source as ResourceSource;
 use frontend\models\finance\Stock;
 use Yii;
 use yii\base\InvalidParamException;
+use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -148,7 +151,8 @@ class SiteController extends Controller
 
                 return $this->goHome();
             } else {
-                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
+                Yii::$app->session->setFlash('error',
+                    'Sorry, we are unable to reset password for the provided email address.');
             }
         }
 
@@ -161,6 +165,7 @@ class SiteController extends Controller
      * Resets password.
      *
      * @param string $token
+     *
      * @return mixed
      * @throws BadRequestHttpException
      */
@@ -206,6 +211,7 @@ class SiteController extends Controller
             $model->save();
             $model = new Stock();
         }
+
         return $this->render('finance/add/stock', ['model' => $model]);
     }
 
@@ -216,6 +222,7 @@ class SiteController extends Controller
             $model->save();
             $model = new Source();
         }
+
         return $this->render('finance/add/source', ['model' => $model]);
     }
 
@@ -226,6 +233,7 @@ class SiteController extends Controller
             $model->save();
             $model = new Rate();
         }
+
         return $this->render('finance/add/rate', ['model' => $model]);
     }
 
@@ -237,6 +245,28 @@ class SiteController extends Controller
             $model = new Details();
         }
         $model->isActive = true;
+
         return $this->render('finance/add/details', ['model' => $model]);
+    }
+
+    public function actionGetSourcesByStockId()
+    {
+        if (isset($_POST['depdrop_parents']) && $_POST['depdrop_parents'] != null) {
+            $output = [];
+            $sourceArray = [];
+            foreach (ResourceSource::find()->where(['stock_id' => $_POST['depdrop_parents'][0]])->all() as $source) {
+                $sourceArray[$source->getAttribute('id')] = $source->getAttribute('name');
+            }
+
+            foreach ($sourceArray as $key => $value) {
+                $output[] = ['id' => $key, 'name' => $value];
+            }
+
+            $selected = isset($output[0]) ? $output[0] : [];
+            return Json::encode(['output' => $output, 'selected' => $selected]);
+
+        }
+
+        return Json::encode(['output' => '', 'selected' => '']);
     }
 }

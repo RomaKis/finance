@@ -5,6 +5,8 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
+$this->title = 'Add Stock';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="add-stock">
     <h3>Existing Stocks</h3>
