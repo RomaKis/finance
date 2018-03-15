@@ -2,7 +2,7 @@
 
 namespace frontend\models\finance;
 
-use frontend\models\resource\finance\Stock;
+use Yii;
 use yii\base\Model;
 
 class Source extends Model
@@ -22,6 +22,7 @@ class Source extends Model
     public function save()
     {
         $source = new \frontend\models\resource\finance\Source();
+        $source->user_id = Yii::$app->getUser()->getId();
         $source->stock_id = $this->stockId;
         $source->name = $this->name;
         $source->save();

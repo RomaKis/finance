@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 
 /**
  * @property integer $id
+ * @property integer $user_id
  * @property string $currency
  * @property float $coefficient
  */
@@ -26,12 +27,12 @@ class Rate extends ActiveRecord
 
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id]);
+        return static::findOne(['id' => $id, 'user_id' => Yii::$app->getUser()->getId()]);
     }
 
     public static function findIdentityByCurrency($currency = self::UAH)
     {
-        return static::findOne(['currency' => $currency]);
+        return static::findOne(['currency' => $currency, 'user_id' => Yii::$app->getUser()->getId()]);
     }
 
     public static function find()

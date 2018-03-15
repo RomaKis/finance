@@ -3,6 +3,7 @@
 namespace frontend\models\finance;
 
 use frontend\models\resource\finance\Rate as ResourceRate;
+use Yii;
 use yii\base\Model;
 
 class Rate extends Model
@@ -25,8 +26,9 @@ class Rate extends Model
         if (null === $rate)
         {
             $rate = new ResourceRate();
-
+            $rate->user_id = Yii::$app->getUser()->getId();
         }
+
         $rate->currency = $this->currency;
         $rate->coefficient = $this->coefficient;
         $rate->save();

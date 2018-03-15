@@ -45,6 +45,10 @@ echo GridView::widget([
                 return Url::to(['finance-details', 'date' => $model->date]);
             }
         ],
+        [
+            'header' => 'Difference <b>UAH</b>',
+            'attribute' => 'difference',
+        ],
     ]
 ]);
 ?>
