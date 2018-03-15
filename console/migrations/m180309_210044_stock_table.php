@@ -17,6 +17,7 @@ class m180309_210044_stock_table extends Migration
             'stock',
             [
                 'id' => Schema::TYPE_PK,
+                'user_id' => Schema::TYPE_INTEGER,
                 'name' => Schema::TYPE_STRING . ' UNIQUE',
             ]
         );

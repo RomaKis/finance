@@ -8,7 +8,7 @@ use yii\base\Model;
 
 class SumProvider extends Model
 {
-    private $sumByDate;
+    private $sumByDate = [];
 
     public function addSumForDate($date, $sum)
     {

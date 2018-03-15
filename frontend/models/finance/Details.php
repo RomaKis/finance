@@ -5,6 +5,7 @@ namespace frontend\models\finance;
 use frontend\models\SumProvider;
 use frontend\models\resource\finance\Details as ResourceDetails;
 use yii\base\Model;
+use Yii;
 
 class Details extends Model
 {
@@ -32,7 +33,7 @@ class Details extends Model
     public function save()
     {
         $details = new ResourceDetails();
-        $details->user_id = $this->userId;
+        $details->user_id = Yii::$app->getUser()->getId();
         $details->stock_id = $this->stockId;
         $details->source_id = $this->sourceId;
         $details->sum = $this->sum;

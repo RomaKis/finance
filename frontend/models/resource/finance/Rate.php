@@ -2,6 +2,7 @@
 
 namespace frontend\models\resource\finance;
 
+use Yii;
 use yii\db\ActiveRecord;
 
 /**
@@ -31,5 +32,13 @@ class Rate extends ActiveRecord
     public static function findIdentityByCurrency($currency = self::UAH)
     {
         return static::findOne(['currency' => $currency]);
+    }
+
+    public static function find()
+    {
+        $object = parent::find();
+        $object->where(['user_id' => Yii::$app->getUser()->getId()]);
+
+        return $object;
     }
 }
