@@ -9,4 +9,5 @@ class Finance extends Model
     public $date;
     public $sumUah;
     public $sumUsd;
+    public $onHoldUah;
 }

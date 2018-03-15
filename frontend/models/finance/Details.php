@@ -38,7 +38,7 @@ class Details extends Model
         $details->sum = $this->sum;
         $details->currency = $this->currency;
         $details->is_active = $this->isActive;
-        $details->date = date('Y-m-d');
+        $details->date = date('Y-m-d', strtotime($this->date));
 
         $details->save();
     }
@@ -46,6 +46,23 @@ class Details extends Model
     public static function getGroupedByDate()
     {
         $financeDetails = ResourceDetails::find()->all();
+        $sumProvider = new SumProvider();
+
+        foreach ($financeDetails as $financeDetail) {
+            $sumUah = Rate::getSumUah(
+                $financeDetail->getAttribute('sum'),
+                $financeDetail->getAttribute('currency')
+            );
+
+            $sumProvider->addSumForDate($financeDetail->getAttribute('date'), $sumUah);
+        }
+
+        return $sumProvider;
+    }
+
+    public static function getActiveGroupedByDate()
+    {
+        $financeDetails = ResourceDetails::find()->where(['is_active' => 1])->all();
         $sumProvider = new SumProvider();
 
         foreach ($financeDetails as $financeDetail) {

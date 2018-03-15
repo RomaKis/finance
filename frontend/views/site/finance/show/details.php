@@ -10,6 +10,8 @@ use frontend\models\finance\NameByIdProvider;
 use frontend\models\resource\finance\Details as ResourceDetails;
 use yii\grid\GridView;
 
+$this->title = 'Details';
+$this->params['breadcrumbs'][] = $this->title;
 $dataProviderSum = new \yii\data\ArrayDataProvider([
     'allModels' => Details::getGroupedByDate()->getSumByDate(Yii::$app->request->get('date')),
 
@@ -20,11 +22,30 @@ $gridViewSum =  GridView::widget([
     'summary' => '',
     'columns' => [
         [
-            'header' => 'Sum <b>UAH</b>',
+            'header' => '<b>UAH</b>',
             'attribute' => 'sumUah',
         ],
         [
-            'header' => 'Sum <b>USD</b>',
+            'header' => '<b>USD</b>',
+            'attribute' => 'sumUsd',
+        ],
+    ]
+]);
+
+$dataProviderActiveSum = new \yii\data\ArrayDataProvider([
+    'allModels' => Details::getActiveGroupedByDate()->getSumByDate(Yii::$app->request->get('date')),
+]);
+
+$gridViewActiveSum =  GridView::widget([
+    'dataProvider' => $dataProviderActiveSum,
+    'summary' => '',
+    'columns' => [
+        [
+            'header' => '<b>UAH</b>',
+            'attribute' => 'sumUah',
+        ],
+        [
+            'header' => '<b>USD</b>',
             'attribute' => 'sumUsd',
         ],
     ]
@@ -61,7 +82,10 @@ echo GridView::widget([
             'footer' => $gridViewSum
         ],
         'currency',
-        'is_active',
+        [
+            'attribute' => 'is_active',
+            'footer' => $gridViewActiveSum
+        ],
         'date',
     ]
 ]);
