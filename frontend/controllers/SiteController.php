@@ -78,7 +78,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        if (!$this->isLogin()) {
+            return $this->actionLogin();
+        }
+
+        return $this->actionFinance();
     }
 
     /**
@@ -191,21 +195,37 @@ class SiteController extends Controller
 
     public function actionFinance()
     {
+        if (!$this->isLogin()) {
+            $this->goHome();
+        }
+
         return $this->render('finance/show/finance');
     }
 
     public function actionFinanceDetails()
     {
+        if (!$this->isLogin()) {
+            $this->goHome();
+        }
+
         return $this->render('finance/show/details');
     }
 
     public function actionAdd()
     {
+        if (!$this->isLogin()) {
+            $this->goHome();
+        }
+
         return $this->render('finance/add');
     }
 
     public function actionAddStock()
     {
+        if (!$this->isLogin()) {
+            $this->goHome();
+        }
+
         $model = new Stock();
         if ($model->load(Yii::$app->request->post())) {
             $model->save();
@@ -217,6 +237,10 @@ class SiteController extends Controller
 
     public function actionAddSource()
     {
+        if (!$this->isLogin()) {
+            $this->goHome();
+        }
+
         $model = new Source();
         if ($model->load(Yii::$app->request->post())) {
             $model->save();
@@ -228,6 +252,10 @@ class SiteController extends Controller
 
     public function actionAddRate()
     {
+        if (!$this->isLogin()) {
+            $this->goHome();
+        }
+
         $model = new Rate();
         if ($model->load(Yii::$app->request->post())) {
             $model->save();
@@ -239,6 +267,10 @@ class SiteController extends Controller
 
     public function actionAddFinanceDetails()
     {
+        if (!$this->isLogin()) {
+            $this->goHome();
+        }
+
         $model = new Details();
         if ($model->load(Yii::$app->request->post())) {
             $model->save();
@@ -263,10 +295,21 @@ class SiteController extends Controller
             }
 
             $selected = isset($output[0]) ? $output[0] : [];
+
             return Json::encode(['output' => $output, 'selected' => $selected]);
 
         }
 
         return Json::encode(['output' => '', 'selected' => '']);
+    }
+
+    private function isLogin()
+    {
+        $isLogin = false;
+        if (!Yii::$app->user->getIsGuest()) {
+            $isLogin = true;
+        }
+
+        return $isLogin;
     }
 }
