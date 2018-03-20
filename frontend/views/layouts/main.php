@@ -40,8 +40,8 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
-        $menuItems[] = ['label' => 'Add', 'url' => ['/site/add']];
-        $menuItems[] = ['label' => 'Finance', 'url' => ['/site/finance']];
+        $menuItems[] = ['label' => 'Add', 'url' => ['/finance/main/add']];
+        $menuItems[] = ['label' => 'Finance', 'url' => ['/finance/show']];
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
