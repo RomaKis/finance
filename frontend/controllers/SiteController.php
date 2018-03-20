@@ -2,22 +2,18 @@
 
 namespace frontend\controllers;
 
-use frontend\models\finance\Details;
-use frontend\models\finance\Rate;
-use frontend\models\finance\Source;
-use frontend\models\resource\finance\Source as ResourceSource;
-use frontend\models\finance\Stock;
-use Yii;
-use yii\base\InvalidParamException;
-use yii\helpers\Json;
-use yii\web\BadRequestHttpException;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
+use frontend\models\resource\finance\Source as ResourceSource;
 use frontend\models\SignupForm;
+use Yii;
+use yii\base\InvalidParamException;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\helpers\Json;
+use yii\web\BadRequestHttpException;
+use yii\web\Controller;
 
 /**
  * Site controller
@@ -78,11 +74,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        if (!$this->isLogin()) {
+        if (Yii::$app->user->getIsGuest()) {
             return $this->actionLogin();
         }
 
-        return $this->actionFinance();
+        return $this->redirect('index.php?r=finance/main/add');
     }
 
     /**
@@ -190,126 +186,5 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
-    }
-
-
-    public function actionFinance()
-    {
-        if (!$this->isLogin()) {
-            $this->goHome();
-        }
-
-        return $this->render('finance/show/finance');
-    }
-
-    public function actionFinanceDetails()
-    {
-        if (!$this->isLogin()) {
-            $this->goHome();
-        }
-
-        return $this->render('finance/show/details');
-    }
-
-    public function actionAdd()
-    {
-        if (!$this->isLogin()) {
-            $this->goHome();
-        }
-
-        return $this->render('finance/add');
-    }
-
-    public function actionAddStock()
-    {
-        if (!$this->isLogin()) {
-            $this->goHome();
-        }
-
-        $model = new Stock();
-        if ($model->load(Yii::$app->request->post())) {
-            $model->save();
-            $model = new Stock();
-        }
-
-        return $this->render('finance/add/stock', ['model' => $model]);
-    }
-
-    public function actionAddSource()
-    {
-        if (!$this->isLogin()) {
-            $this->goHome();
-        }
-
-        $model = new Source();
-        if ($model->load(Yii::$app->request->post())) {
-            $model->save();
-            $model = new Source();
-        }
-
-        return $this->render('finance/add/source', ['model' => $model]);
-    }
-
-    public function actionAddRate()
-    {
-        if (!$this->isLogin()) {
-            $this->goHome();
-        }
-
-        $model = new Rate();
-        if ($model->load(Yii::$app->request->post())) {
-            $model->save();
-            $model = new Rate();
-        }
-
-        return $this->render('finance/add/rate', ['model' => $model]);
-    }
-
-    public function actionAddFinanceDetails()
-    {
-        if (!$this->isLogin()) {
-            $this->goHome();
-        }
-
-        $model = new Details();
-        if ($model->load(Yii::$app->request->post())) {
-            $model->save();
-            $model = new Details();
-        }
-        $model->isActive = true;
-
-        return $this->render('finance/add/details', ['model' => $model]);
-    }
-
-    public function actionGetSourcesByStockId()
-    {
-        if (isset($_POST['depdrop_parents']) && $_POST['depdrop_parents'] != null) {
-            $output = [];
-            $sourceArray = [];
-            foreach (ResourceSource::find()->where(['stock_id' => $_POST['depdrop_parents'][0]])->all() as $source) {
-                $sourceArray[$source->getAttribute('id')] = $source->getAttribute('name');
-            }
-
-            foreach ($sourceArray as $key => $value) {
-                $output[] = ['id' => $key, 'name' => $value];
-            }
-
-            $selected = isset($output[0]) ? $output[0] : [];
-
-            return Json::encode(['output' => $output, 'selected' => $selected]);
-
-        }
-
-        return Json::encode(['output' => '', 'selected' => '']);
-    }
-
-    private function isLogin()
-    {
-        $isLogin = false;
-        if (!Yii::$app->user->getIsGuest()) {
-            $isLogin = true;
-        }
-
-        return $isLogin;
     }
 }

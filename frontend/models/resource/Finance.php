@@ -1,28 +1,23 @@
 <?php
 
-namespace frontend\models\resource\finance;
+namespace frontend\models\resource;
 
 use Yii;
 use yii\db\ActiveRecord;
 
 /**
  * @property integer $id
- * @property integer $user_id
- * @property integer $stock_id
- * @property integer $source_id
- * @property integer $sum
- * @property string $currency
- * @property boolean $is_active
  * @property string $date
+ * @property integer $sum_uah
  */
-class Details extends ActiveRecord
+class Finance extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%finance_details}}';
+        return '{{%finance}}';
     }
 
     public static function findIdentity($id)

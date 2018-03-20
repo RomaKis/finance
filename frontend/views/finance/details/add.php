@@ -80,7 +80,7 @@ $model->date = date('Y-m-d')
     'pluginOptions' => [
         'depends' => ['stock_id'],
         'placeholder' => '',
-        'url' => Url::to(['get-sources-by-stock-id']),
+        'url' => Url::to(['finance/source/get-by-stock-id']),
     ]
 ]);
 ?>
