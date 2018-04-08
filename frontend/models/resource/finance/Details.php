@@ -72,9 +72,8 @@ class Details extends ActiveRecord
             $finance->setAttribute('date', $date);
             $finance->setAttribute('user_id', Yii::$app->getUser()->getId());
         }
-        $sumUah = SumProvider::getSumUahByDate($date);
-        $finance->setAttribute('sum_uah', $sumUah);
-
+        $finance->setAttribute('sum_uah', SumProvider::getSumUahByDate($date));
+        $finance->setAttribute('sum_uah_active', SumProvider::getActiveSumUahByDate($date));
         $finance->save();
 
         return $toReturn;
@@ -86,8 +85,8 @@ class Details extends ActiveRecord
 
         $date = $this->getAttribute('date');
         $finance = ResourceFinance::findIdentityByDate($date);
-        $sumUah = SumProvider::getSumUahByDate($date);
-        $finance->setAttribute('sum_uah', $sumUah);
+        $finance->setAttribute('sum_uah', SumProvider::getSumUahByDate($date));
+        $finance->setAttribute('sum_uah_active', SumProvider::getActiveSumUahByDate($date));
 
         if ($finance->sum_uah == 0) {
             $finance->delete();

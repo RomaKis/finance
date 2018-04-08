@@ -26,5 +26,22 @@ class SumProvider extends Model
         return $sum;
     }
 
+    public static function getActiveSumUahByDate($date)
+    {
+        $sum = 0;
+        $details = Details::findIdentitiesByDate($date);
+        /** @var Details $detail */
+        foreach ($details as $detail) {
+            if ($detail->getAttribute('is_active')) {
+                $currency = $detail->getAttribute('currency');
+                if ($currency === ResourceRate::UAH) {
+                    $sum += $detail->sum;
+                } else {
+                    $sum += Rate::getSumUah($detail->sum, $currency);
+                }
+            }
+        }
 
+        return $sum;
+    }
 }

@@ -21,6 +21,8 @@ foreach (\frontend\models\resource\Finance::find()->all() as $model) {
     $finance->date = $model->getAttribute('date');
     $finance->sumUah = $model->getAttribute('sum_uah');
     $finance->sumUsd = Rate::getSumUsd($model->getAttribute('sum_uah'), RateResource::UAH);
+    $finance->sumUahActive = $model->getAttribute('sum_uah_active');
+    $finance->sumUsdActive = Rate::getSumUsd($model->getAttribute('sum_uah_active'), RateResource::UAH);
     $finance->difference = $model->getAttribute('sum_uah') - $diff;
     $diff = $finance->difference;
 
@@ -46,6 +48,14 @@ $dataProvider = new \yii\data\ArrayDataProvider([
             [
                 'header' => 'Sum <b>USD</b>',
                 'attribute' => 'sumUsd',
+            ],
+            [
+                'header' => 'Sum Active <b>UAH</b>',
+                'attribute' => 'sumUahActive',
+            ],
+            [
+                'header' => 'Sum Active <b>USD</b>',
+                'attribute' => 'sumUsdActive',
             ],
             [
                 'class' => ActionColumn::className(),
