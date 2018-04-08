@@ -30,17 +30,15 @@ echo GridView::widget([
         [
             'label' => 'Stock Name',
             'value' => function ($model) {
-                $nameById = new NameByIdProvider();
 
-                return $nameById->getStockNameById($model->getAttribute('stock_id'));
+                return NameByIdProvider::getStockNameById($model->getAttribute('stock_id'));
             }
         ],
         [
             'label' => 'Source Name',
             'value' => function ($model) {
-                $nameById = new NameByIdProvider();
 
-                return $nameById->getSourceNameById($model->getAttribute('source_id'));
+                return NameByIdProvider::getSourceNameById($model->getAttribute('source_id'));
             }
         ],
         'sum',

@@ -2,16 +2,18 @@
 
 namespace frontend\models\finance;
 
-use frontend\models\SumProvider;
 use frontend\models\resource\finance\Details as ResourceDetails;
 use yii\base\Model;
 use Yii;
 
 class Details extends Model
 {
+    public $id;
     public $userId;
     public $stockId;
+    public $stockName;
     public $sourceId;
+    public $sourceName;
     public $sum;
     public $currency;
     public $isActive;
@@ -20,13 +22,8 @@ class Details extends Model
     public function rules()
     {
         return [
-            ['userId', 'required'],
-            ['stockId', 'required'],
-            ['sourceId', 'required'],
-            ['sum', 'required'],
-            ['currency', 'required'],
-            ['isActive', 'required'],
-            ['date', 'required'],
+            [['stockName', 'sourceName', 'stockId', 'sourceId', 'id'], 'safe'],
+            [['userId', 'sum', 'currency', 'isActive', 'date'], 'required'],
         ];
     }
 
@@ -44,37 +41,44 @@ class Details extends Model
         $details->save();
     }
 
-    public static function getGroupedByDate()
+    public static function findIdentitiesByDate($date)
     {
-        $financeDetails = ResourceDetails::find()->all();
-        $sumProvider = new SumProvider();
+        $resourceDetails = ResourceDetails::findIdentitiesByDate($date);
+        $details = [];
+        /** @var ResourceDetails $resourceDetail */
+        foreach ($resourceDetails as $resourceDetail) {
+            $detail = new Details();
+            $detail->id = $resourceDetail->getAttribute('id');
+            $detail->userId = $resourceDetail->getAttribute('user_id');
+            $detail->sum = $resourceDetail->getAttribute('sum');
+            $detail->currency = $resourceDetail->getAttribute('currency');
+            $detail->isActive = $resourceDetail->getAttribute('is_active');
+            $detail->date = $resourceDetail->getAttribute('date');
+            $detail->stockId = $resourceDetail->getAttribute('stock_id');
+            $detail->sourceId = $resourceDetail->getAttribute('source_id');
+            $detail->stockName = NameByIdProvider::getStockNameById($resourceDetail->getAttribute('stock_id'));
+            $detail->sourceName = NameByIdProvider::getSourceNameById($resourceDetail->getAttribute('source_id'));
 
-        foreach ($financeDetails as $financeDetail) {
-            $sumUah = Rate::getSumUah(
-                $financeDetail->getAttribute('sum'),
-                $financeDetail->getAttribute('currency')
-            );
-
-            $sumProvider->addSumForDate($financeDetail->getAttribute('date'), $sumUah);
+            $details[] = $detail;
         }
 
-        return $sumProvider;
+        return $details;
     }
 
-    public static function getActiveGroupedByDate()
+    public static function createDuplicateForDate($date)
     {
-        $financeDetails = ResourceDetails::find()->where(['is_active' => 1])->all();
-        $sumProvider = new SumProvider();
-
-        foreach ($financeDetails as $financeDetail) {
-            $sumUah = Rate::getSumUah(
-                $financeDetail->getAttribute('sum'),
-                $financeDetail->getAttribute('currency')
-            );
-
-            $sumProvider->addSumForDate($financeDetail->getAttribute('date'), $sumUah);
+        $date = date('Y-m-d', strtotime($date));
+        $query = ResourceDetails::find();
+        $maxDate = $query->max('date');
+        $details = ResourceDetails::findIdentitiesByDate($maxDate);
+        foreach ($details as $detail) {
+            $newDetail = new \frontend\models\resource\finance\Details();
+            $newDetail->setAttributes($detail->getAttributes());
+            $newDetail->id = null;
+            $newDetail->date = $date;
+            $newDetail->save();
         }
 
-        return $sumProvider;
+        return self::findIdentitiesByDate($date);
     }
 }

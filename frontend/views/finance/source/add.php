@@ -25,8 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Stock Name',
                 'value' => function ($model) {
-                    $nameById = new NameByIdProvider();
-                    return $nameById->getStockNameById($model->getAttribute('stock_id'));
+                    return NameByIdProvider::getStockNameById($model->getAttribute('stock_id'));
                 }
             ],
             'name',
