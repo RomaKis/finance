@@ -10,6 +10,7 @@ use yii\db\ActiveRecord;
  * @property integer $user_id
  * @property string $date
  * @property integer $sum_uah
+ * @property integer $sum_uah_active
  */
 class Finance extends ActiveRecord
 {

@@ -20,6 +20,7 @@ class m180309_211790_finance_table extends Migration
                 'user_id' => Schema::TYPE_INTEGER,
                 'date' => Schema::TYPE_DATE,
                 'sum_uah' => Schema::TYPE_INTEGER,
+                'sum_uah_active' => Schema::TYPE_INTEGER,
             ]
         );
     }
