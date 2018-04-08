@@ -6,6 +6,8 @@
 /* @var $models Details[] */
 
 use frontend\models\finance\Details;
+use frontend\models\finance\Rate;
+use frontend\models\resource\finance\Rate as ResourceRate;
 use kartik\grid\GridView;
 use yii\grid\ActionColumn;
 use yii\helpers\Html;
@@ -64,15 +66,6 @@ $gridColumns = [
         }
     ],
     [
-        'class' => kartik\grid\EditableColumn::className(),
-        'attribute' => 'date',
-        'editableOptions'=> function ($model, $key, $index, $widget) {
-            return [
-                'afterInput' => Html::hiddenInput('id', $model->id),
-            ];
-        }
-    ],
-    [
         'class' => ActionColumn::className(),
         'header' => 'Actions',
         'headerOptions' => ['style' => 'color:#337ab7'],
@@ -82,8 +75,47 @@ $gridColumns = [
         }
     ],
 ];
-
 echo GridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => $gridColumns
 ]);
+
+
+$sum = 0;
+$activeSum = 0;
+foreach ($models as $model) {
+    $localSum = 0;
+    $currency = $model->currency;
+    if ($currency === ResourceRate::UAH) {
+        $localSum  = $model->sum;
+    } else {
+        $localSum = Rate::getSumUah($model->sum, $currency);
+    }
+
+    $sum += $localSum;
+    if ($model->isActive) {
+        $activeSum += $localSum;
+    }
+}
+$sumUsd = Rate::getSumUsd($sum, ResourceRate::UAH);
+$activeSumUsd = Rate::getSumUsd($activeSum, ResourceRate::UAH);
+
+$result = [
+    'Sum UAH:' => $sum,
+    'Sum USD:' => $sumUsd,
+    '__Active sum UAH:__' => $activeSum,
+    '__Active sum USD:__' => $activeSumUsd,
+];
+
+echo '<table class="table-bordered">';
+foreach ($result as $label => $value) {
+    echo '<tr>';
+    echo '<td>';
+    echo Html::label($label);
+    echo '</td>';
+    echo '<td>';
+    echo Html::label($value);
+    echo '</td>';
+    echo '</tr>';
+}
+echo '</table>';
