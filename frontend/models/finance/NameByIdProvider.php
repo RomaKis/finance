@@ -7,7 +7,7 @@ use frontend\models\resource\finance\Stock;
 
 class NameByIdProvider
 {
-    public function getStockNameById($id)
+    public static function getStockNameById($id)
     {
         $stock = new Stock();
         $stock = $stock->findIdentity(['id' => $id]);
@@ -15,7 +15,7 @@ class NameByIdProvider
         return $stock->getAttribute('name');
     }
 
-    public function getSourceNameById($id)
+    public static function getSourceNameById($id)
     {
         $source = new Source();
         $source = $source->findIdentity(['id' => $id]);

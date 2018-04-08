@@ -3,90 +3,87 @@
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 
-/* @var $model Details */
+/* @var $models Details[] */
 
 use frontend\models\finance\Details;
-use frontend\models\finance\NameByIdProvider;
-use frontend\models\resource\finance\Details as ResourceDetails;
-use yii\grid\GridView;
+use kartik\grid\GridView;
+use yii\grid\ActionColumn;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 $this->title = 'Details';
 $this->params['breadcrumbs'][] = $this->title;
-$dataProviderSum = new \yii\data\ArrayDataProvider([
-    'allModels' => Details::getGroupedByDate()->getSumByDate(Yii::$app->request->get('date')),
-
-]);
-
-$gridViewSum =  GridView::widget([
-    'dataProvider' => $dataProviderSum,
-    'summary' => '',
-    'columns' => [
-        [
-            'header' => '<b>UAH</b>',
-            'attribute' => 'sumUah',
-        ],
-        [
-            'header' => '<b>USD</b>',
-            'attribute' => 'sumUsd',
-        ],
-    ]
-]);
-
-$dataProviderActiveSum = new \yii\data\ArrayDataProvider([
-    'allModels' => Details::getActiveGroupedByDate()->getSumByDate(Yii::$app->request->get('date')),
-]);
-
-$gridViewActiveSum =  GridView::widget([
-    'dataProvider' => $dataProviderActiveSum,
-    'summary' => '',
-    'columns' => [
-        [
-            'header' => '<b>UAH</b>',
-            'attribute' => 'sumUah',
-        ],
-        [
-            'header' => '<b>USD</b>',
-            'attribute' => 'sumUsd',
-        ],
-    ]
-]);
 
 $dataProvider = new \yii\data\ArrayDataProvider([
-    'allModels' => ResourceDetails::findIdentitiesByDate(Yii::$app->request->get('date')),
-
+    'allModels' => $models,
 ]);
+$gridColumns = [
+    [
+        'attribute' => 'userId',
+    ],
+    [
+        'attribute' => 'stockName',
+    ],
+    [
+        'attribute' => 'sourceName',
+    ],
+    [
+        'class' => kartik\grid\EditableColumn::className(),
+        'attribute' => 'sum',
+        'editableOptions'=> function ($model, $key, $index, $widget) {
+            return [
+                'afterInput' => Html::hiddenInput('id', $model->id),
+            ];
+        }
+    ],
+    [
+        'class' => kartik\grid\EditableColumn::className(),
+        'attribute' => 'currency',
+        'editableOptions'=> function ($model, $key, $index, $widget) {
+            return [
+                'afterInput' => Html::hiddenInput('id', $model->id),
+            ];
+        }
+    ],
+    [
+        'class' => kartik\grid\EditableColumn::className(),
+        'attribute' => 'isActive',
+        'editableOptions'=> function ($model, $key, $index, $widget) {
+            return [
+                'afterInput' => Html::hiddenInput('id', $model->id),
+            ];
+        }
+    ],
+    [
+        'class' => kartik\grid\EditableColumn::className(),
+        'attribute' => 'date',
+        'editableOptions'=> function ($model, $key, $index, $widget) {
+            return [
+                'afterInput' => Html::hiddenInput('id', $model->id),
+            ];
+        }
+    ],
+    [
+        'class' => kartik\grid\EditableColumn::className(),
+        'attribute' => 'date',
+        'editableOptions'=> function ($model, $key, $index, $widget) {
+            return [
+                'afterInput' => Html::hiddenInput('id', $model->id),
+            ];
+        }
+    ],
+    [
+        'class' => ActionColumn::className(),
+        'header' => 'Actions',
+        'headerOptions' => ['style' => 'color:#337ab7'],
+        'template' => '{delete}',
+        'urlCreator' => function ($action, $model, $key, $index) {
+            return Url::to(['finance/details/delete', 'id' => $model->id]);
+        }
+    ],
+];
+
 echo GridView::widget([
     'dataProvider' => $dataProvider,
-    'showFooter' => true,
-    'columns' => [
-        'id',
-        'user_id',
-        [
-            'label' => 'Stock Name',
-            'value' => function ($model) {
-                $nameById = new NameByIdProvider();
-
-                return $nameById->getStockNameById($model->getAttribute('stock_id'));
-            }
-        ],
-        [
-            'label' => 'Source Name',
-            'value' => function ($model) {
-                $nameById = new NameByIdProvider();
-
-                return $nameById->getSourceNameById($model->getAttribute('source_id'));
-            }
-        ],
-        [
-            'attribute' => 'sum',
-            'footer' => $gridViewSum
-        ],
-        'currency',
-        [
-            'attribute' => 'is_active',
-            'footer' => $gridViewActiveSum
-        ],
-        'date',
-    ]
+    'columns' => $gridColumns
 ]);
-?>

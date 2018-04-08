@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 
 /**
  * @property integer $id
+ * @property integer $user_id
  * @property string $date
  * @property integer $sum_uah
  */
@@ -25,9 +26,9 @@ class Finance extends ActiveRecord
         return static::findOne(['id' => $id, 'user_id' => Yii::$app->getUser()->getId()]);
     }
 
-    public static function findIdentitiesByDate($date)
+    public static function findIdentityByDate($date)
     {
-        return static::findAll(['date' => $date, 'user_id' => Yii::$app->getUser()->getId()]);
+        return static::findOne(['date' => $date, 'user_id' => Yii::$app->getUser()->getId()]);
     }
 
     public static function find()

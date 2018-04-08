@@ -4,6 +4,7 @@
 /* @var $form yii\bootstrap\ActiveForm */
 
 
+use yii\bootstrap\ActiveForm;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -21,6 +22,7 @@ foreach (\frontend\models\resource\Finance::find()->all() as $model) {
     $finance->sumUah = $model->getAttribute('sum_uah');
     $finance->sumUsd = Rate::getSumUsd($model->getAttribute('sum_uah'), RateResource::UAH);
     $finance->difference = $model->getAttribute('sum_uah') - $diff;
+    $diff = $finance->difference;
 
     $finances[] = $finance;
 }
@@ -61,4 +63,24 @@ $dataProvider = new \yii\data\ArrayDataProvider([
         ]
     ]);
     ?>
+</div>
+<div class="add-finance">
+<?php $model = new \frontend\models\resource\Finance();
+$model->date = date('Y-m-d');
+
+?>
+    <div class="row">
+        <div class="col-lg-5">
+            <?php $form = ActiveForm::begin(['id' => 'add-finance-form']); ?>
+
+            <?= $form->field($model, 'date')->widget(yii\jui\DatePicker::className(), []); ?>
+
+            <div class="form-group">
+                <?= Html::submitButton('Add for the date', ['class' => 'btn btn-primary', 'name' =>
+                    'add-finance-button']) ?>
+            </div>
+
+            <?php ActiveForm::end(); ?>
+        </div>
+    </div>
 </div>

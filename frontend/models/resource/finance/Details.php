@@ -2,6 +2,8 @@
 
 namespace frontend\models\resource\finance;
 
+use frontend\models\resource\Finance as ResourceFinance;
+use frontend\models\SumProvider;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -17,6 +19,13 @@ use yii\db\ActiveRecord;
  */
 class Details extends ActiveRecord
 {
+    public function rules()
+    {
+        return [
+            [['user_id', 'stock_id', 'source_id', 'sum', 'currency', 'is_active', 'date'], 'safe'],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -41,5 +50,51 @@ class Details extends ActiveRecord
         $object->where(['user_id' => Yii::$app->getUser()->getId()]);
 
         return $object;
+    }
+
+    public function setAttributes($values, $safeOnly = true)
+    {
+        if (isset($values['isActive'])) {
+            $this->is_active = $values['isActive'];
+        } else {
+            parent::setAttributes($values, $safeOnly);
+        }
+    }
+
+    public function save($runValidation = true, $attributeNames = null)
+    {
+        $toReturn = parent::save($runValidation, $attributeNames);
+
+        $date = $this->getAttribute('date');
+        $finance = ResourceFinance::findIdentityByDate($date);
+        if (!$finance) {
+            $finance = new ResourceFinance();
+            $finance->setAttribute('date', $date);
+            $finance->setAttribute('user_id', Yii::$app->getUser()->getId());
+        }
+        $sumUah = SumProvider::getSumUahByDate($date);
+        $finance->setAttribute('sum_uah', $sumUah);
+
+        $finance->save();
+
+        return $toReturn;
+    }
+
+    public function delete()
+    {
+        $toReturn = parent::delete();
+
+        $date = $this->getAttribute('date');
+        $finance = ResourceFinance::findIdentityByDate($date);
+        $sumUah = SumProvider::getSumUahByDate($date);
+        $finance->setAttribute('sum_uah', $sumUah);
+
+        if ($finance->sum_uah == 0) {
+            $finance->delete();
+        } else {
+            $finance->save();
+        }
+
+        return $toReturn;
     }
 }
